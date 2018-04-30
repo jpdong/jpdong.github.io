@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>多字节传输中的大小端问题 | 我几乎是对的</title>
+
+  
+  <meta name="author" content="董三毛">
+  
+
+  
+  <meta name="description" content="在几乎所有的机器上，多字节对象都被存储为连续的字节序列。例如在C语言中，一个类型为int的变量x地址为0x100，那么其对应地址表达式&amp;amp;x的值为0x100。且x的四个字节将被存储在存储器的0x100, 0x101, 0x102, 0x103位置。  
+而存储地址内的排列则有两个通用规则。一个多位的整数将按照其存储地址的最低或最高字节排列。如果最低有效位在最高有效位的前面，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。">
+  
+
+  
+  <meta name="keywords" content="Android Java Swift">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="多字节传输中的大小端问题"/>
+
+  <meta property="og:site_name" content="我几乎是对的"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">我几乎是对的</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>多字节传输中的大小端问题</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/04/12/多字节传输中的大小端问题/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-04-12T14:18:30.000Z">
+          2018-04-12
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>在几乎所有的机器上，多字节对象都被存储为连续的字节序列。例如在C语言中，一个类型为int的变量x地址为0x100，那么其对应地址表达式&amp;x的值为0x100。且x的四个字节将被存储在存储器的0x100, 0x101, 0x102, 0x103位置。  </p>
+<p>而存储地址内的排列则有两个通用规则。一个多位的整数将按照其存储地址的最低或最高字节排列。如果最低有效位在最高有效位的前面，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。  </p>
+<a id="more"></a>
+<p>例如假设上述变量x类型为int，位于地址0x100处，它的十六进制为0x01234567，地址范围为0x100~0x103字节，其内部排列顺序依赖于机器的类型。大端法从首位开始将是：0x100: 01, 0x101: 23..而小端法将是：0x100: 67, 0x101: 45..  </p>
+<p> 对于单一的字节（a byte），大部分处理器以相同的顺序处理位元（bit），因此单字节的存放方法和传输方式一般相同。  </p>
+<p>对于多字节数据，如整数（32位机中一般占4字节），在不同的处理器的存放方式主要有两种，以内存中0x0A0B0C0D的存放方式为例，分别有以下几种方式：</p>
+<h4 id="1-大端序（big-endian）或称大尾序："><a href="#1-大端序（big-endian）或称大尾序：" class="headerlink" title="1.  大端序（big-endian）或称大尾序："></a>1.  大端序（big-endian）或称大尾序：</h4><ul>
+<li>数据以8bit为单位:<br>地址增长方向  →<br>…    0x0A    0x0B    0x0C    0x0D    …<br>示例中，最高位字节是0x0A 存储在最低的内存地址处。下一个字节0x0B存在后面的地址处。正类似于十六进制字节从左到右的阅读顺序。</li>
+<li>数据以16bit为单位:<br>地址增长方向  →<br>…    0x0A0B    0x0C0D    …<br>最高的16bit单元0x0A0B存储在低位。</li>
+</ul>
+<h4 id="2-小端序（little-endian）或称小尾序。"><a href="#2-小端序（little-endian）或称小尾序。" class="headerlink" title="2.  小端序（little-endian）或称小尾序。"></a>2.  小端序（little-endian）或称小尾序。</h4><ul>
+<li>数据以8bit为单位:<br>地址增长方向  →<br>…    0x0D    0x0C    0x0B    0x0A    …<br>最低位字节是0x0D 存储在最低的内存地址处。后面字节依次存在后面的地址处。</li>
+<li>数据以16bit为单位:<br>地址增长方向  →<br>…    0x0C0D    0x0A0B    …<br>最低的16bit单元0x0C0D存储在低位。<br>更改地址的增长方向:<br>当更改地址的增长方向，使之由右至左时，表格更具有可阅读性。<br>←  地址增长方向<br>…    0x0A    0x0B    0x0C    0x0D    …<br>最低有效位（LSB）是0x0D 存储在最低的内存地址处。后面字节依次存在后面的地址处。<br>←  地址增长方向<br>…    0x0A0B    0x0C0D    …<br>最低的16bit单元0x0C0D存储在低位。</li>
+</ul>
+<h4 id="3-混合序（middle-endian）具有更复杂的顺序。0x0A0B0C0D被存储为："><a href="#3-混合序（middle-endian）具有更复杂的顺序。0x0A0B0C0D被存储为：" class="headerlink" title="3.  混合序（middle-endian）具有更复杂的顺序。0x0A0B0C0D被存储为："></a>3.  混合序（middle-endian）具有更复杂的顺序。0x0A0B0C0D被存储为：</h4><p>地址增长方向  →<br>…    0x0B    0x0A    0x0D    0x0C    …<br>可以看作高16bit和低16bit以大端序存储，但16bit内部以小端存储。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jpdong-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'jpdong';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2018 董三毛
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</body>
+</html>

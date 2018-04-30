@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>尾递归的骗局 | 我几乎是对的</title>
+
+  
+  <meta name="author" content="董三毛">
+  
+
+  
+  <meta name="description" content="之前看书的时候，有看到尾递归方面的理论知识，比较有名的是作为对递归计算阶乘的优化，理论上无懈可击，是那么完美，但现实很骨感。事实是，大部分语言和编译器都不支持尾递归优化。
+对于尾递归（或者说尾调用），维基百科的解释如下：
+
+在计算机学里，尾调用是指一个函数里的最后一个动作是返回一个函数的调用结果的情形，即最后一步新调用的返回值直接被当前函数的返回结果。此时，该尾部调用位置被称为尾位置。尾调用中有一种重要而特殊的情形叫做尾递归。经过适当处理，尾递归形式的函数的运行效率可以被极大地优化。尾调用原则上都可以通过简化函数调用栈的结构而获得性能优化（称为“尾调用消除”），但是优化尾调用是否方便可行取决于运行环境对此类优化的支持程度如何。">
+  
+
+  
+  <meta name="keywords" content="Android Java Swift">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="尾递归的骗局"/>
+
+  <meta property="og:site_name" content="我几乎是对的"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">我几乎是对的</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>尾递归的骗局</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/04/26/尾递归的骗局/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-04-26T14:03:37.000Z">
+          2018-04-26
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>之前看书的时候，有看到尾递归方面的理论知识，比较有名的是作为对递归计算阶乘的优化，理论上无懈可击，是那么完美，但现实很骨感。事实是，大部分语言和编译器都不支持尾递归优化。</p>
+<p>对于尾递归（或者说尾调用），维基百科的解释如下：</p>
+<blockquote>
+<p>在计算机学里，尾调用是指一个函数里的最后一个动作是返回一个函数的调用结果的情形，即最后一步新调用的返回值直接被当前函数的返回结果。此时，该尾部调用位置被称为尾位置。尾调用中有一种重要而特殊的情形叫做尾递归。经过适当处理，尾递归形式的函数的运行效率可以被极大地优化。尾调用原则上都可以通过简化函数调用栈的结构而获得性能优化（称为“尾调用消除”），但是优化尾调用是否方便可行取决于运行环境对此类优化的支持程度如何。</p>
+</blockquote>
+<a id="more"></a>
+<p>先插个题外话，最近在细读王垠的博客，获益匪浅。在他的启发下，开始学习<code>Scheme</code>，所以一些小程序的代码尽量会用<code>Scheme</code>去写。</p>
+<p>使用普通递归计算阶乘代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(define factorial</span><br><span class="line">  (lambda (n)</span><br><span class="line">    (if (= n 1)</span><br><span class="line">        1</span><br><span class="line">        (* n (factorial (- n 1)))</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<p>  使用尾递归优化的代码如下：<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(define factorial</span><br><span class="line">  (lambda (n total)</span><br><span class="line">    (if (= n 1)</span><br><span class="line">      total</span><br><span class="line">      (factorial (- n 1) (* n total))</span><br><span class="line">      )</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>  理想情况下，编译器会对尾递归进行优化，调用者的栈帧（可以理解为环境）里的数据不再被使用，其占用的空间完全可以被重复利用，被调用者不需再分配栈空间。递归是一个比较抽象的操作，使用者往往对调用栈的深度很难有形象的概念，因此递归操作非常容易造成栈溢出。尾递归在理论上完美解决了这一问题。</p>
+<p>  但实际上呢？</p>
+<p>故事源于我遇到的一个编程题，题目如下：</p>
+<blockquote>
+<p>给定一个非负整数数组，你最初位于数组的第一个位置。<br>数组中的每个元素代表你在该位置可以跳跃的最大长度。<br>你的目标是使用最少的跳跃次数到达数组的最后一个位置。<br>示例:<br>输入: [2,3,1,1,4]<br>输出: 2<br>解释: 跳到最后一个位置的最小跳跃数是 2。<br>     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。<br>说明:<br>假设你总是可以到达数组的最后一个位置。</p>
+</blockquote>
+<p>由于之前对于尾递归的好感，随手写了一个尾递归。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int jump(int[] nums) &#123;</span><br><span class="line">        return findMax(nums,0,0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private int findMax(int[] nums, int index,int times) &#123;</span><br><span class="line">        if (nums[index] &gt;= nums.length - 1 - index) &#123;</span><br><span class="line">            return 1 + times;</span><br><span class="line">        &#125;</span><br><span class="line">        int max = 0;</span><br><span class="line">        int maxIndex = index;</span><br><span class="line">        if (nums[index] == 1) &#123;</span><br><span class="line">            maxIndex++;</span><br><span class="line">        &#125; else&#123;</span><br><span class="line">            for (int i = 0; i &lt; nums[index]; i++) &#123;</span><br><span class="line">                if (nums[index + 1 + i] &gt;= max) &#123;</span><br><span class="line">                    max = nums[index + 1 + i];</span><br><span class="line">                    maxIndex = index + 1 + i;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;</span><br><span class="line">        return findMax(nums,maxIndex,times + 1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后就在传入参数数组全为1且长度足够长的时候出现了栈溢出，至此我依然认为是我对尾递归的理解不到家，没有写到精髓点。于是去查资料，才发现Java根本不支持尾递归优化。而且发现不少语言和编译器都不支持尾递归优化，我没有一一去尝试，便不提具体名字。</p>
+<p>现在我对尾递归有了更全面的认识，属于一个还没有被全面支持的完美理论。以后的代码应该尽量避开递归，多用循环实现。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/算法/">算法</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jpdong-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'jpdong';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2018 董三毛
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</body>
+</html>

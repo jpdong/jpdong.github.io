@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>数据结构平衡二叉树中的旋转 | 我几乎是对的</title>
+
+  
+  <meta name="author" content="董三毛">
+  
+
+  
+  <meta name="description" content="网上关于平衡二叉树的文章大多是摆几张图，然后就开始贴代码，很多具体的细节都没有说清楚，需要读者去试错。本篇文章试图说明这些细节，希望读者看了这篇文章之后，就能立马实现出来。">
+  
+
+  
+  <meta name="keywords" content="Android Java Swift">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="数据结构平衡二叉树中的旋转"/>
+
+  <meta property="og:site_name" content="我几乎是对的"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">我几乎是对的</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>数据结构平衡二叉树中的旋转</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/04/12/数据结构平衡二叉树-AVLTree-中的旋转/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-04-12T14:22:28.000Z">
+          2018-04-12
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>网上关于平衡二叉树的文章大多是摆几张图，然后就开始贴代码，很多具体的细节都没有说清楚，需要读者去试错。本篇文章试图说明这些细节，希望读者看了这篇文章之后，就能立马实现出来。</p>
+<p><img src="/images/avl-tree.png" alt=""></p>
+<a id="more"></a>
+<p>只说插入的情况，删除的情况和插入差不多，旋转的四个情况了解清楚了都好说。</p>
+<h4 id="1-左左情况"><a href="#1-左左情况" class="headerlink" title="1. 左左情况"></a>1. 左左情况</h4><p><strong>注意，此时的左左情况是基于自下而上（从插入的新叶子节点往上查找）的第一个不平衡的节点。</strong></p>
+<p>这个基准点很重要，所有的操作都与这个点有关，反而新插入的叶子节点不一定需要参与旋转。</p>
+<p>图中的root节点就是基准点。</p>
+<p>如果root的左子树pivot存在，并且pivot的左子树也存在，则满足左左情况，进行一次右旋操作，即可平衡。</p>
+<p>旋转实施起来比较简单，此文不再赘述。</p>
+<h4 id="2-右右情况"><a href="#2-右右情况" class="headerlink" title="2. 右右情况"></a>2. 右右情况</h4><p>图中的root节点就是基准点（同上）。</p>
+<p>如果root的右子树pivot存在，并且pivot的右子树也存在，则满足右右情况，进行一次左旋操作，即可平衡。</p>
+<h4 id="3-左右情况"><a href="#3-左右情况" class="headerlink" title="3. 左右情况"></a>3. 左右情况</h4><p><strong>注意，此时的图有误导的可能，基准点不再是root节点，因为root节点是平衡的。</strong></p>
+<p>现在的基准点是root节点的父节点，我们暂且称它为parent节点。</p>
+<p>如果parent的左子树root存在，并且root的右子树也存在，则满足左右情况，先进行一次左旋操作，变成第一种情况。基准点始终不变，再按第一种情况进行一次右旋操作，即可平衡。</p>
+<h4 id="4-右左情况"><a href="#4-右左情况" class="headerlink" title="4. 右左情况"></a>4. 右左情况</h4><p>跟第三种情况类似，root节点的父节点parent为基准点。</p>
+<p>如果parent的右子树root存在，并且root的左子树也存在，则满足右左情况，先进行一次右旋操作，变成第二种情况。基准点始终不变，再按第二种情况进行一次左旋操作，即可平衡。</p>
+<h3 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h3><p>另外，给大家推荐一个可视化的工具，叫visualgo。</p>
+<p><a href="https://visualgo.net/zh/bst" target="_blank" rel="noopener">https://visualgo.net/zh/bst</a></p>
+<p>如果具体怎么旋转的不好想出来和画出来，可以参考这个工具。每个值的插入都会以动画的形式呈现出来，右下角还有伪代码解释每一步操作，理解起来会很有帮助。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/数据结构/">数据结构</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jpdong-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'jpdong';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2018 董三毛
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</body>
+</html>

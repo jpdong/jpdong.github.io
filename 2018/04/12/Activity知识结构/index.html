@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Activity知识结构 | 我几乎是对的</title>
+
+  
+  <meta name="author" content="董三毛">
+  
+
+  
+  <meta name="description" content="对Android四大组件之一的Activity知识进行的整理。由官方文档翻译整理总结而来。Activity无疑是Android中最重要的部分，类似于iOS中的UIViewController。">
+  
+
+  
+  <meta name="keywords" content="Android Java Swift">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Activity知识结构"/>
+
+  <meta property="og:site_name" content="我几乎是对的"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">我几乎是对的</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Activity知识结构</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/04/12/Activity知识结构/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-04-12T13:44:52.000Z">
+          2018-04-12
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>对Android四大组件之一的Activity知识进行的整理。由官方文档翻译整理总结而来。Activity无疑是Android中最重要的部分，类似于iOS中的UIViewController。</p>
+<a id="more"></a>
+<h3 id="一、概要"><a href="#一、概要" class="headerlink" title="一、概要"></a>一、概要</h3><h4 id="1-建立Activity："><a href="#1-建立Activity：" class="headerlink" title="1. 建立Activity："></a>1. 建立Activity：</h4><p>1.1 继承Activity类并重写重要函数</p>
+<p>创建相关布局文件<br>重写<code>onCreate()</code>和<code>onPause()</code>等需要的函数，加载布局</p>
+<p>1.2 注册</p>
+<p>在<code>AndroidManifest.xml</code>文件中注册相关Activity<br>在<code>&lt;activity&gt;</code>标签中添加相应Activity的需要的<code>&lt;intent-filter&gt;</code>内容</p>
+<h4 id="2-启动Activity："><a href="#2-启动Activity：" class="headerlink" title="2. 启动Activity："></a>2. 启动Activity：</h4><p>2.1 启动方式</p>
+<p>显示<code>Intent</code>：通过指定目标活动名称来启动<br>隐式<code>Intent</code>：通过指定<code>action</code>和<code>category</code>来寻找合适的活动来启动</p>
+<p>2.2 数据传递</p>
+<p>向下一个活动传递数据：<code>Intent</code>数据存取的一些操作<br>返回数据给上一个活动：通过<code>startActivityForResult()</code>方法启动下一个活动，并重写<code>onActivityResult()</code>处理返回数据</p>
+<p>2.3 启动模式</p>
+<ul>
+<li>standard</li>
+<li>singleTop</li>
+<li>singleTask</li>
+<li>singleInstance</li>
+</ul>
+<p>2.4 生命周期</p>
+<ul>
+<li>2.4.1 管理Activity生命周期</li>
+</ul>
+<p>完整生存期：在<code>onCreate()</code>到<code>onDestory()</code>之间的各种操作<br>可见生存期：<code>onStart()-&gt;onResume()-&gt;onPause()-&gt;onStop()-&gt;onRestart()</code>该活动可以被用户看见<br>前台生存期：<code>onResume()-&gt;onPause()</code>该活动在这期间可以和用户进行交互</p>
+<ul>
+<li><p>2.4.2 存储Activity的状态：通过<code>onSaveInstanceState()</code>方法存储Activity的状态，保障活动被回收后能回复数据</p>
+</li>
+<li><p>2.4.3 处理设定的变更：横竖屏切换的生命周期的变化</p>
+</li>
+</ul>
+<h4 id="3-关闭Activity："><a href="#3-关闭Activity：" class="headerlink" title="3. 关闭Activity："></a>3. 关闭Activity：</h4><p>可以通过<code>finish()</code>方法关闭此Activity，或是通过<code>finishActivity()</code>关闭之前启动的某个Activity</p>
+<h3 id="二、重点"><a href="#二、重点" class="headerlink" title="二、重点"></a>二、重点</h3><h4 id="1-Intent的使用"><a href="#1-Intent的使用" class="headerlink" title="1. Intent的使用"></a>1. Intent的使用</h4><p> 1.1显式Intent启动的传值与取值</p>
+<ul>
+<li>传值<br>传给下一个activity：在第一个活动中用<code>putExtra(&quot;key&quot;,value)</code>将数据暂存到Intent中，通过Intent传到下一个activity。<br>传给上一个activity：如果前一个activity需要从当前activity获得结果，则需要在当前activity的<code>finish()</code>之前用<code>setResult(resultCode,Intent)</code>方法返回结果，存数据方法与上面一致。</li>
+<li>取值<br>从上一个activity取：通过<code>getIntent()</code>获得Intent，并通过相关数据类型的<code>get...(&quot;key&quot;)</code>和键名获取数据。<br>从下一个activity取：启动下一个activity的时候通过<code>startActivityForResult()</code>方法，并重写<code>onActivityResult()</code>方法，在该方法内获取数据并处理。<br>1.2隐式Intent启动的传值与取值<br>与显示的大致差不多，只不过是没有指定具体的下一个activity，在启动的时候是通过相应的action，一般常在找联系人、找图片……中用到</li>
+</ul>
+<h4 id="2-理解生命周期"><a href="#2-理解生命周期" class="headerlink" title="2. 理解生命周期"></a>2. 理解生命周期</h4><p> 2.1 生命周期的进行路径和前后联系<br>说再多不如上图：</p>
+<p><img src="/images/activity_lifecycle.png" alt=""></p>
+<p> 2.2 关于存储activity状态</p>
+<p>通过重写<code>onSaveInstanceState()</code>方法，将数据以key-value的形式暂存到<code>saveInstanceState</code>中，当activity需要重建的时候可以在<code>onCreate()</code>或是<code>onRestoreInstanceState()</code>中恢复。<br>上图：</p>
+<p> 2.3 关于状态变化的处理</p>
+<p>横竖屏切换时activity生命周期的变化<br>均会经历有<code>onCreate()</code>和<code>onDestory()</code>完整的生命周期</p>
+<h4 id="3-关注启动方式和Task"><a href="#3-关注启动方式和Task" class="headerlink" title="3. 关注启动方式和Task"></a>3. 关注启动方式和Task</h4><p>一个Task是一系列Activity的集合，这个集合是以堆栈的形式来组织的，遵循后进先出的原则。</p>
+<p> 3.1 启动模式与Flag以及返回栈</p>
+<p>启动模式在<code>AndroidManifest.xml</code>文件中更改<br>也可以通过在Intent里使用<code>addFlag()</code>方法，但对于<code>AndroidManifest.xml</code>里已经定义了的（非standard模式）不生效。</p>
+<ul>
+<li><p>standard：<br>  默认模式，每当启动一个新的活动，都会创建该活动的一个新的实例。<br>  与使用Intent里的<code>FLAG_ACTIVITY_NEW_TASK</code>类似（官网好像有点问题）</p>
+</li>
+<li><p>singleTop<br>  当启动一个活动时，如果发现返回栈的栈顶是该活动，则直接使用不新建；如果栈顶不是该活动，则新建。<br>  与使用Intent里的<code>FLAG_ACTIVITY_SINGLE_TOP</code>类似</p>
+</li>
+<li><p>singleTask<br>  当启动一个活动时，先检查返回栈中是否有该活动，如果有，则将该活动之上的全部出栈，直接使用该活动；如果没有，则新建。<br>  与使用Intent里的<code>FLAG_ACTIVITY_CLEAR_TOP</code>类似（官网好像有点问题）</p>
+</li>
+<li><p>singleInstance<br>  当启动这个模式的活动时，为这个Activity新建一个返回栈。这种模式用图看会好理解一些，图中SecondActivity则是这种模式。</p>
+</li>
+</ul>
+<p> 3.2 关于taskAffinity</p>
+<ul>
+<li>第一种情况：当某个应用的activity进入后台，当一个和它有相同affinity的Task进入前台时，它会重新宿主，进入到该前台的task中。（仅限于根Activity，与<code>allowTaskReparenting</code>属性没什么关系，而且后者不会被创建）</li>
+<li>第二种情况：如果通过Intent的<code>FLAG_ACTIVITY_NEW_TASK</code>加载某个Activity时，它会首先检查是否存在与自己<code>taskAffinity</code>相同的Task，如果存在，那么它会直接进入到该Task中，如果不存在则重新创建Task。</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Android/">Android</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jpdong-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'jpdong';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2018 董三毛
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</body>
+</html>
