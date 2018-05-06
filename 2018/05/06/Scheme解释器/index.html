@@ -3,12 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Scheme解释器 | 我几乎是对的</title>
+  <title>Scheme 解释器 | 我几乎是对的</title>
 
   
   <meta name="author" content="董三毛">
   
 
+  
+  <meta name="description" content="最近重读王垠的博客，每天地铁上就刷个一两篇，然后再看《编译原理》就豁然开朗了。琢磨着Scheme语法简洁规范，前缀表达式是天然的树状语法，写个Scheme的解释器似乎没想象中那么难了，便动手用Java实现一个Scheme的编译器前端。
+推荐读一下王垠的文章 http://www.yinwang.org/blog-cn/2012/08/01/interpreter
+编译器前端工作一般包括两个大步骤：词法分析和语法分析。还有符号表（有的地方也称环境）贯穿这两个步骤，上述文章里的符号表是用单链表实现，简单易懂，方便教学，我们也可以试着用链式哈希表实现。源程序一般以字符串的形式输入，对输入字符逐个扫描分析，生成抽象语法树（abstract syntax tree），再根据每个树节点的符号、类型去进行语法分析，解释执行出最后结果。如果是用Scheme自举的话，词法分析几乎不需要做。">
   
 
   
@@ -19,7 +23,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-  <meta property="og:title" content="Scheme解释器"/>
+  <meta property="og:title" content="Scheme 解释器"/>
 
   <meta property="og:site_name" content="我几乎是对的"/>
 
@@ -60,7 +64,7 @@
 
   
     
-    <h3 class="article-title"><span>Scheme解释器</span></h3>
+    <h3 class="article-title"><span>Scheme 解释器</span></h3>
     
   
 
@@ -80,7 +84,17 @@
   <div class="article-content">
     <div class="entry">
       
-        
+        <p>最近重读王垠的博客，每天地铁上就刷个一两篇，然后再看《编译原理》就豁然开朗了。琢磨着<code>Scheme</code>语法简洁规范，前缀表达式是天然的树状语法，写个<code>Scheme</code>的解释器似乎没想象中那么难了，便动手用<code>Java</code>实现一个<code>Scheme</code>的编译器前端。</p>
+<p>推荐读一下王垠的文章 <a href="http://www.yinwang.org/blog-cn/2012/08/01/interpreter" target="_blank" rel="noopener">http://www.yinwang.org/blog-cn/2012/08/01/interpreter</a></p>
+<p>编译器前端工作一般包括两个大步骤：词法分析和语法分析。还有符号表（有的地方也称环境）贯穿这两个步骤，上述文章里的符号表是用单链表实现，简单易懂，方便教学，我们也可以试着用链式哈希表实现。源程序一般以字符串的形式输入，对输入字符逐个扫描分析，生成抽象语法树（<code>abstract syntax tree</code>），再根据每个树节点的符号、类型去进行语法分析，解释执行出最后结果。如果是用Scheme自举的话，词法分析几乎不需要做。</p>
+<a id="more"></a>
+<h4 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h4><p>如果是复杂的程序，词法分析是需要预读后面多个字符，书中也提到了一些预读缓存优化方案。我开始也尝试着使用预读判断的方案，<code>Java</code>中的<code>PushbackInputStream</code>可以手动实现预读单个字符，但对于Scheme语言这么规整的格式，我们完全可以不用预读，通过对输入字符串的整体处理，按空格分开，生成有意义的字符串数组。</p>
+<blockquote>
+<p>对于”(+”中没有空格的情况，参考 <a href="https://github.com/jpdong/pytudes/blob/master/py/lis.py" target="_blank" rel="noopener">https://github.com/jpdong/pytudes/blob/master/py/lis.py</a> 中的方式，可以先将”(“替换成” ( “，前后分别添加空格解决。</p>
+</blockquote>
+<p><img src="/images/ast.png" alt=""></p>
+<p>对于每一个括号对，我们可以把它看做是树的一个节点。和二叉树略有不同的是，父节点的子节点的个数是不确定的，需要通过语法分析最终决定，所以在这里我们可以考虑用数组全部存下来。</p>
+
       
     </div>
 
@@ -91,6 +105,13 @@
 
     
 
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Java/">Java</a>
+    </span>
     
 
     </div>
