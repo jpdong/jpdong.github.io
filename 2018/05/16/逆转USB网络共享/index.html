@@ -1,0 +1,208 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>逆转 Android USB 网络共享 | 我几乎是对的</title>
+
+  
+  <meta name="author" content="董三毛">
+  
+
+  
+  <meta name="description" content="可能是贫穷限制了我的想象力，我一直以为Android手机设置里的USB网络共享是用PC的网络供给手机上网，一直没用过。直到有一次工作中某个通过4G上网的设备没有流量之后，我便想要要用这个功能用电脑“救济”一下这个设备，用了之后我就傻了，这是用来把Android设备的流量供给电脑用，不能使用电脑的网络。在贫穷的我看来这个功能简直鸡肋。
+后来发现开启USB网络共享之后，会在Windows里增加一个网络适配器，网络经验丰富的前辈告诉我说可以试一下用NAT转发。当时我脑中一片空白，虽然大学里也学过计算机网络，但从来没有实战过，而且NAT是个啥，书上有么。
+于是为了实现这个黑科技，我几乎又研究了一遍计算机网络，了解了NAT，iptables，linux系统的防火墙设计。收获颇多，就有了这篇文字。">
+  
+
+  
+  <meta name="keywords" content="Android Java Swift">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="逆转 Android USB 网络共享"/>
+
+  <meta property="og:site_name" content="我几乎是对的"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">我几乎是对的</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>逆转 Android USB 网络共享</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/05/16/逆转USB网络共享/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-05-16T13:48:12.000Z">
+          2018-05-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>可能是贫穷限制了我的想象力，我一直以为<code>Android</code>手机设置里的USB网络共享是用<code>PC</code>的网络供给手机上网，一直没用过。直到有一次工作中某个通过<code>4G</code>上网的设备没有流量之后，我便想要要用这个功能用电脑“救济”一下这个设备，用了之后我就傻了，这是用来把<code>Android</code>设备的流量供给电脑用，不能使用电脑的网络。在贫穷的我看来这个功能简直鸡肋。</p>
+<p>后来发现开启USB网络共享之后，会在<code>Windows</code>里增加一个网络适配器，网络经验丰富的前辈告诉我说可以试一下用<code>NAT</code>转发。当时我脑中一片空白，虽然大学里也学过计算机网络，但从来没有实战过，而且<code>NAT</code>是个啥，书上有么。</p>
+<p>于是为了实现这个黑科技，我几乎又研究了一遍计算机网络，了解了<code>NAT</code>，<code>iptables</code>，<code>linux</code>系统的防火墙设计。收获颇多，就有了这篇文字。<br><a id="more"></a><br>不熟悉<code>iptables</code>的可以先看一篇文章了解一下： <a href="http://cn.linux.vbird.org/linux_server/0250simple_firewall_3.php" target="_blank" rel="noopener">http://cn.linux.vbird.org/linux_server/0250simple_firewall_3.php</a></p>
+<p>通过<code>USB</code>线连接电脑和手机，<code>Windows</code>的网络适配器里会出现一个新的适配器。<br><img src="/images/rndis.png" alt=""><br>给它一个固定<code>ip</code>方便后续操作<br><img src="/images/rndis_ip.png" alt=""></p>
+<p>我们先将电脑的网络共享给<code>USB</code>适配器。<br><img src="/images/share.png" alt=""></p>
+<p>最开始我希望是到这里就结束了，后来发现我还是太天真。</p>
+<p>下面所有操作都需要进入<code>Android</code>手机的<code>shell</code>，同时需要有设备的<code>root</code>权限。</p>
+<h4 id="开启ip转发"><a href="#开启ip转发" class="headerlink" title="开启ip转发"></a>开启<code>ip</code>转发</h4><p>Linux系统缺省并没有打开IP转发功能，要确认IP转发功能的状态，可以使用下面命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/sys/net/ipv4/ip_forward</span><br></pre></td></tr></table></figure></p>
+<p>如果这个值为<code>0</code>，则需要打开它：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; /proc/sys/net/ipv4/ip_forward</span><br></pre></td></tr></table></figure></p>
+<h4 id="iptables"><a href="#iptables" class="headerlink" title="iptables"></a>iptables</h4><p>现在需要说一下<code>iptables</code>的使用，我也只能说使用，我对其实现原理也不知道，就按普通的<code>DSL</code>使用就好了。我们先实现一个小目标，实现设备内部可以<code>ping</code>通外网，整个转发只涉及一个端口<code>rndis0</code>。单个端口转发弄清楚，后面再实现多端口转发就简单了。<br><img src="/images/iptables.png" alt=""><br>Linux 的 <code>iptables</code> 至少有三个表，包括管理本机进出的 <code>filter</code> 、管理后端主机 (防火墙内部的其他计算机) 的 <code>nat</code> 、管理特殊旗标使用的 <code>mangle</code> (较少使用) 。在这里我们只关注<code>filter</code>和<code>nat</code>。</p>
+<p>以下是<code>filter</code>涉及到3条主要的链</p>
+<ul>
+<li><code>INPUT</code>：主要与想要进入<code>Linux</code> 本机的封包有关</li>
+<li><code>OUTPUT</code>：主要与 <code>Linux</code>本机所要送出的封包有关</li>
+<li><code>FORWARD</code>：主要与转发有关</li>
+</ul>
+<p><img src="/images/filter.png" alt=""></p>
+<p>以下是<code>nat</code> 涉及到3条主要的链</p>
+<ul>
+<li><code>PREROUTING</code>：在进行路由判断之前所要进行的规则(<code>DNAT/REDIRECT</code>)</li>
+<li><code>POSTROUTING</code>：在进行路由判断之后所要进行的规则(<code>SNAT/MASQUERADE</code>)</li>
+<li><code>OUTPUT</code>：与发送出去的封包有关</li>
+</ul>
+<p><img src="/images/nat.png" alt=""></p>
+<p>先清除所有规则<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -F</span><br><span class="line">iptables -X</span><br><span class="line">iptables -Z</span><br></pre></td></tr></table></figure></p>
+<p>再查看可操作的网络端口（<code>netcfg</code>）<br><img src="/images/netcfg.png" alt=""></p>
+<p>我们需要允许数据从<code>rndis0</code>进出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iptables -t nat -I POSTROUTING -o rndis0 -j ACCEPT</span><br><span class="line">iptables -I FORWARD -i rndis0 -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br></pre></td></tr></table></figure></p>
+<p>将<code>rndis0</code>设为软路由<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip route add default dev rndis0 via 192.168.42.1 table local</span><br></pre></td></tr></table></figure></p>
+<p>此时我们已经能在<code>shell</code>里<code>ping</code>通外网了，但仅限<code>ping ip</code>地址，所以我们还需要给路由添加<code>DNS</code>服务地址<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ndc resolver setnetdns rndis0 &quot;&quot; 114.114.114.114</span><br></pre></td></tr></table></figure></p>
+<p>此时我们就可以通过域名<code>ping</code>通外网了<br><img src="/images/ping_bing.png" alt=""></p>
+<p>如果需要将设备的网络通过wifi热点共享出去，就很简单的，只需要在上述基础上，添加<code>ap0</code>端口的转发，此处不再赘述。<br>上述对<code>iptables</code>的操作在设备重启之后会被清除，所以可以写一个简单的脚本或者<code>app</code>实现逆转网络共享。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Android/">Android</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jpdong-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'jpdong';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2018 董三毛
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</body>
+</html>
