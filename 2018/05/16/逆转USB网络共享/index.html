@@ -84,7 +84,7 @@
   <div class="article-content">
     <div class="entry">
       
-        <p>可能是贫穷限制了我的想象力，我一直以为<code>Android</code>手机设置里的USB网络共享是用<code>PC</code>的网络供给手机上网，一直没用过。直到有一次工作中某个通过<code>4G</code>上网的设备没有流量之后，我便想要要用这个功能用电脑“救济”一下这个设备，用了之后我就傻了，这是用来把<code>Android</code>设备的流量供给电脑用，不能使用电脑的网络。在贫穷的我看来这个功能简直鸡肋。</p>
+        <p>可能是贫穷限制了我的想象力，我一直以为<code>Android</code>手机设置里的<code>USB</code>网络共享是用<code>PC</code>的网络供给手机上网，一直没用过。直到有一次工作中某个通过<code>4G</code>上网的设备没有流量之后，我便想要要用这个功能用电脑“救济”一下这个设备，用了之后我就傻了，这是用来把<code>Android</code>设备的流量供给电脑用，不能使用电脑的网络。在贫穷的我看来这个功能简直鸡肋。</p>
 <p>后来发现开启USB网络共享之后，会在<code>Windows</code>里增加一个网络适配器，网络经验丰富的前辈告诉我说可以试一下用<code>NAT</code>转发。当时我脑中一片空白，虽然大学里也学过计算机网络，但从来没有实战过，而且<code>NAT</code>是个啥，书上有么。</p>
 <p>于是为了实现这个黑科技，我几乎又研究了一遍计算机网络，了解了<code>NAT</code>，<code>iptables</code>，<code>linux</code>系统的防火墙设计。收获颇多，就有了这篇文字。<br><a id="more"></a><br>不熟悉<code>iptables</code>的可以先看一篇文章了解一下： <a href="http://cn.linux.vbird.org/linux_server/0250simple_firewall_3.php" target="_blank" rel="noopener">http://cn.linux.vbird.org/linux_server/0250simple_firewall_3.php</a></p>
 <p>通过<code>USB</code>线连接电脑和手机，<code>Windows</code>的网络适配器里会出现一个新的适配器。<br><img src="/images/rndis.png" alt=""><br>给它一个固定<code>ip</code>方便后续操作<br><img src="/images/rndis_ip.png" alt=""></p>
