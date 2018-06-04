@@ -88,7 +88,7 @@
 <p>还好，<code>ReactiveX</code> 库优雅地解决了这个问题，而且还是跨平台的，<code>RxJava</code> 和 <code>RxSwift</code> 让移动端的线程切换工作变得优雅起来。</p>
 <p>这篇文章主要试图说清楚<code>RxJava2</code>线程切换的实现过程。</p>
 <a id="more"></a>
-<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><p><code>RxJava2</code> 的线程操作符是 <code>subscribeOn</code> 和 <code>observeOn</code> ，我们先按调用顺序一步步看。以下源码码均有简化。</p>
+<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><p><code>RxJava2</code> 的线程操作符是 <code>subscribeOn</code> 和 <code>observeOn</code> ，我们先按调用顺序一步步看。以下源码均有简化。</p>
 <ul>
 <li><p><code>subscribeOn</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public final Observable&lt;T&gt; subscribeOn(Scheduler scheduler) &#123;</span><br><span class="line">    return RxJavaPlugins.onAssembly(new ObservableSubscribeOn&lt;T&gt;(this, scheduler));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
