@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>RxJava2 线程切换原理 | 我几乎是对的</title>
+
+  
+  <meta name="author" content="董三毛">
+  
+
+  
+  <meta name="description" content="在移动端编程的时候基本上都会需要频繁地切换线程，因为复杂的耗时任务需要放到后台线程里去运行，UI绘制工作又只能在主线程里执行。Android 里一般用Handler实现，iOS 里通过系统提供的任务队列实现，但两者均不够优雅，无可避免地需要将代码包裹起来，Android 里需要用Runnable传递，iOS里则是闭包。如果遇到多次切换线程的情况，代码的缩进层级就会变深，可读性变差。
+还好，ReactiveX 库优雅地解决了这个问题，而且还是跨平台的，RxJava 和 RxSwift 让移动端的线程切换工作变得优雅起来。
+这篇文章主要试图说清楚RxJava2线程切换的实现过程。">
+  
+
+  
+  <meta name="keywords" content="Android Java Swift">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="RxJava2 线程切换原理"/>
+
+  <meta property="og:site_name" content="我几乎是对的"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">我几乎是对的</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">首页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>RxJava2 线程切换原理</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/06/04/RxJava2线程切换原理/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-06-04T12:44:51.000Z">
+          2018-06-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>在移动端编程的时候基本上都会需要频繁地切换线程，因为复杂的耗时任务需要放到后台线程里去运行，<code>UI</code>绘制工作又只能在主线程里执行。<code>Android</code> 里一般用<code>Handler</code>实现，<code>iOS</code> 里通过系统提供的任务队列实现，但两者均不够优雅，无可避免地需要将代码包裹起来，<code>Android</code> 里需要用<code>Runnable</code>传递，<code>iOS</code>里则是闭包。如果遇到多次切换线程的情况，代码的缩进层级就会变深，可读性变差。</p>
+<p>还好，<code>ReactiveX</code> 库优雅地解决了这个问题，而且还是跨平台的，<code>RxJava</code> 和 <code>RxSwift</code> 让移动端的线程切换工作变得优雅起来。</p>
+<p>这篇文章主要试图说清楚<code>RxJava2</code>线程切换的实现过程。</p>
+<a id="more"></a>
+<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><p><code>RxJava2</code> 的线程操作符是 <code>subscribeOn</code> 和 <code>observeOn</code> ，我们先按调用顺序一步步看。以下源码码均有简化。</p>
+<ul>
+<li><p><code>subscribeOn</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public final Observable&lt;T&gt; subscribeOn(Scheduler scheduler) &#123;</span><br><span class="line">    return RxJavaPlugins.onAssembly(new ObservableSubscribeOn&lt;T&gt;(this, scheduler));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  <code>subscribeOn</code> 操作符将之前产生的 <code>Observable</code> 和 传入的 <code>Scheduler</code>封装成 <code>ObservableSubscribeOn</code> 。</p>
+</li>
+</ul>
+<ul>
+<li><p><code>observeOn</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public final Observable&lt;T&gt; observeOn(Scheduler scheduler, boolean delayError, int bufferSize) &#123;</span><br><span class="line">    return RxJavaPlugins.onAssembly(new ObservableObserveOn&lt;T&gt;(this, scheduler, delayError, bufferSize));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <code>observeOn</code> 操作符将之前产生的 <code>Observable</code> 和 传入的 <code>Scheduler</code>封装成 <code>ObservableObserveOn</code> 。</p>
+</li>
+</ul>
+<ul>
+<li><p><code>subscribe</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public final Disposable subscribe(Consumer&lt;? super T&gt; onNext, Consumer&lt;? super Throwable&gt; onError,</span><br><span class="line">        Action onComplete, Consumer&lt;? super Disposable&gt; onSubscribe) &#123;</span><br><span class="line">    LambdaObserver&lt;T&gt; ls = new LambdaObserver&lt;T&gt;(onNext, onError, onComplete, onSubscribe);</span><br><span class="line">    subscribe(ls);</span><br><span class="line">    return ls;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public final void subscribe(Observer&lt;? super T&gt; observer) &#123;  </span><br><span class="line">    subscribeActual(observer);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  最后通过<code>subscribe</code>操作符设置观察者(<code>Observer</code>)来触发整个流程。</p>
+</li>
+</ul>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p><code>subscribe</code> 会调用上一个<code>Observable</code>（即<code>ObservableObserveOn</code>）的 <code>subscribeActual()</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">protected void subscribeActual(Observer&lt;? super T&gt; observer) &#123;</span><br><span class="line">    if (scheduler instanceof TrampolineScheduler) &#123;</span><br><span class="line">        source.subscribe(observer);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        Scheduler.Worker w = scheduler.createWorker();</span><br><span class="line">        source.subscribe(new ObserveOnObserver&lt;T&gt;(observer, w, delayError, bufferSize));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此处将<code>observeOn</code>操作符后面的观察者（包括后面所有的操作符和<code>Observer</code>）和其将要运行的线程相关内容（<code>Worker</code>）封装成<code>ObserveOnObserver</code> 。此处的<code>source</code>为<code>observeOn</code>操作符之前的内容（切换之前产生的<code>Observable</code>）。</p>
+<p><strong>由此可见，每一次<code>observeOn</code>的使用，都会将后面的观察者（同上）和将要切换的线程内容封装起来。</strong></p>
+<p>我们可以看看<code>ObserveOnObserver</code>的执行过程。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public void onSubscribe(Disposable s) &#123;</span><br><span class="line">      if (DisposableHelper.validate(this.s, s)) &#123;</span><br><span class="line">          this.s = s;</span><br><span class="line">          if (s instanceof QueueDisposable) &#123;</span><br><span class="line">              @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">              QueueDisposable&lt;T&gt; qd = (QueueDisposable&lt;T&gt;) s;</span><br><span class="line"></span><br><span class="line">              int m = qd.requestFusion(QueueDisposable.ANY | QueueDisposable.BOUNDARY);</span><br><span class="line"></span><br><span class="line">              if (m == QueueDisposable.SYNC) &#123;</span><br><span class="line">                  sourceMode = m;</span><br><span class="line">                  queue = qd;</span><br><span class="line">                  done = true;</span><br><span class="line">                  actual.onSubscribe(this);</span><br><span class="line">                  schedule();</span><br><span class="line">                  return;</span><br><span class="line">              &#125;</span><br><span class="line">              if (m == QueueDisposable.ASYNC) &#123;</span><br><span class="line">                  sourceMode = m;</span><br><span class="line">                  queue = qd;</span><br><span class="line">                  actual.onSubscribe(this);</span><br><span class="line">                  return;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          queue = new SpscLinkedArrayQueue&lt;T&gt;(bufferSize);</span><br><span class="line"></span><br><span class="line">          actual.onSubscribe(this);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  void schedule() &#123;</span><br><span class="line">      if (getAndIncrement() == 0) &#123;</span><br><span class="line">          worker.schedule(this);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public void run() &#123;</span><br><span class="line">      if (outputFused) &#123;</span><br><span class="line">          drainFused();</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">          drainNormal();</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ......</span><br></pre></td></tr></table></figure></p>
+<p>该<code>ObserveOnObserver</code>里的数据处理都将在指定的<code>Scheduler</code>里执行，所以到这里可以证明，每次<code>observeOn</code>都会切换后面内容的执行线程。</p>
+<p>再继续往上调用，回到前面的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source.subscribe(new ObserveOnObserver&lt;T&gt;(observer, w, delayError, bufferSize));</span><br></pre></td></tr></table></figure>
+<p>假设该<code>source</code>是由<code>subscribeOn</code>产生的， 此处将会调用<code>ObservableSubscribeOn</code>里的<code>subscribeActual()</code> 方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public void subscribeActual(final Observer&lt;? super T&gt; s) &#123;</span><br><span class="line">    final SubscribeOnObserver&lt;T&gt; parent = new SubscribeOnObserver&lt;T&gt;(s);</span><br><span class="line">    s.onSubscribe(parent);</span><br><span class="line">    parent.setDisposable(scheduler.scheduleDirect(new SubscribeTask(parent)));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">final class SubscribeTask implements Runnable &#123;</span><br><span class="line">    private final SubscribeOnObserver&lt;T&gt; parent;</span><br><span class="line"></span><br><span class="line">    SubscribeTask(SubscribeOnObserver&lt;T&gt; parent) &#123;</span><br><span class="line">        this.parent = parent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        source.subscribe(parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上一个操作产生的<code>source</code>（即<code>Observable</code>）的<code>subscribe</code>操作将在指定的<code>Scheduler</code>里执行， <strong>每一次<code>subscribeOn</code>的调用都会在之前的<code>Observable</code>上封装一层，但数据的发射由最里层的<code>Observable</code>实现，即在第一个<code>ObservableSubscribeOn</code>封装里执行。</strong></p>
+<p>我们以最简单的 <code>ObservableJust</code> 举例，<code>subscribeActual()</code>  必然在第一个<code>subscribeOn</code>里的<code>Scheduler</code>里执行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public final class ObservableJust&lt;T&gt; extends Observable&lt;T&gt; implements ScalarCallable&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private final T value;</span><br><span class="line">    public ObservableJust(final T value) &#123;</span><br><span class="line">        this.value = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void subscribeActual(Observer&lt;? super T&gt; s) &#123;</span><br><span class="line">        ScalarDisposable&lt;T&gt; sd = new ScalarDisposable&lt;T&gt;(s, value);</span><br><span class="line">        s.onSubscribe(sd);</span><br><span class="line">        sd.run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public T call() &#123;</span><br><span class="line">        return value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">      public void run() &#123;</span><br><span class="line">            if (get() == START &amp;&amp; compareAndSet(START, ON_NEXT)) &#123;</span><br><span class="line">                observer.onNext(value);</span><br><span class="line">                if (get() == ON_NEXT) &#123;</span><br><span class="line">                    lazySet(ON_COMPLETE);</span><br><span class="line">                    observer.onComplete();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>文章从源码层面解释了<code>RxJava2</code>线程切换的原理，以及 <code>subscribeOn</code> 和 <code>observeOn</code> 两个操作符生效的场景。<br>整个流程还是很复杂，我先是读了几遍源码，但是在记忆里找起来总是很混乱，便写了个简单的<code>demo</code>，用断点调试工具一步步地走，才慢慢豁然开朗。如果看不明白，建议使用断点调试工具。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Java/">Java</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jpdong-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'jpdong';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2018 董三毛
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</body>
+</html>

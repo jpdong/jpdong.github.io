@@ -61,6 +61,69 @@
 
   
     
+    <h3 class="article-title"><a href="/2018/06/04/RxJava2线程切换原理/"><span>RxJava2 线程切换原理</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/06/04/RxJava2线程切换原理/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-06-04T12:44:51.000Z">
+          2018-06-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>在移动端编程的时候基本上都会需要频繁地切换线程，因为复杂的耗时任务需要放到后台线程里去运行，<code>UI</code>绘制工作又只能在主线程里执行。<code>Android</code> 里一般用<code>Handler</code>实现，<code>iOS</code> 里通过系统提供的任务队列实现，但两者均不够优雅，无可避免地需要将代码包裹起来，<code>Android</code> 里需要用<code>Runnable</code>传递，<code>iOS</code>里则是闭包。如果遇到多次切换线程的情况，代码的缩进层级就会变深，可读性变差。</p>
+<p>还好，<code>ReactiveX</code> 库优雅地解决了这个问题，而且还是跨平台的，<code>RxJava</code> 和 <code>RxSwift</code> 让移动端的线程切换工作变得优雅起来。</p>
+<p>这篇文章主要试图说清楚<code>RxJava2</code>线程切换的实现过程。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Java/">Java</a>
+    </span>
+    
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2018/06/04/RxJava2线程切换原理/#comment">Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
     <h3 class="article-title"><a href="/2018/05/16/逆转USB网络共享/"><span>逆转 Android USB 网络共享</span></a></h3>
     
   
