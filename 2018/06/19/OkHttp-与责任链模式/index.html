@@ -1,89 +1,88 @@
-<!DOCTYPE HTML>
 <html>
+<!-- Head tag -->
 <head>
-  <meta charset="utf-8">
-  
-  <title>OkHttp 与责任链模式 | 我几乎是对的</title>
+  <meta charset="UTF-8">
 
   
-  <meta name="author" content="董三毛">
+  <title>
+    OkHttp 与责任链模式 |
+    Goods Rank
+  </title>
   
 
-  
-  <meta name="description" content="大学上 UML 课程的时候总觉得设计模式遥不可及、无法理解，印象最深的是 UML 课程期末考试的最后一题是责任链模式相关的内容，我没有做出来。毕业后，也曾抱着《设计模式·可复用面向对象软件的基础》从头开始看，总感觉一头雾水，少点什么。
-如今看来，当时还是见得太少，经验不足。">
-  
 
-  
-  <meta name="keywords" content="Android Java Swift">
-  
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta property="og:title" content="OkHttp 与责任链模式" />
+  <meta property="og:description" content="" />
+  <meta property='og:site_name' content='Goods Rank' />
+  <meta property="og:image" content="https://rank.design/img/default.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:description" content="" />
+  <meta name="twitter:title" content="OkHttp 与责任链模式" />
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="twitter:image" content="https://rank.design/img/default.jpg" />
 
-  <meta property="og:title" content="OkHttp 与责任链模式"/>
+  <script src="https://www.amcharts.com/lib/4/core.js"></script>
+  <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 
-  <meta property="og:site_name" content="我几乎是对的"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="/./css/style.css">
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
-
 <body>
-<div class="blog">
-  <div class="content">
-
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">我几乎是对的</a>
-    </h1>
-    <p class="site-description"></p>
+    <!-- Menu -->
+    <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark page-navbar gradient">
+  <div class="container">
+    <a class="navbar-brand logo" href="https://rank.design">
+      Goods Rank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item item">
+          
+        <li class="nav-item item">
+          <a class="nav-link" href="/">
+            Home</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="/archives">
+            🗂️Archives</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="https://hexo.io/">
+            Hexo</a>
+        </li>
+        
+        </li>
+      </ul>
+    </div>
   </div>
-  <nav class="site-navigation">
-    <ul>
-      
-        <li><a href="/">首页</a></li>
-      
-        <li><a href="/archives">归档</a></li>
-      
-    </ul>
-  </nav>
-</header>
+</nav>
 
-    <main class="site-main posts-loop">
-    <article>
-
-  
-    
-    <h3 class="article-title"><span>OkHttp 与责任链模式</span></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/06/19/OkHttp-与责任链模式/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-06-19T13:56:54.000Z">
-          2018-06-19
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p>大学上 UML 课程的时候总觉得设计模式遥不可及、无法理解，印象最深的是 UML 课程期末考试的最后一题是责任链模式相关的内容，我没有做出来。毕业后，也曾抱着《设计模式·可复用面向对象软件的基础》从头开始看，总感觉一头雾水，少点什么。</p>
+    <main class="page main-page">
+        <div class="container blogPost">
+    <div class="row">
+        <div class="col-sm-8">
+            <h2 class="blog-post-title">
+                OkHttp 与责任链模式
+            </h2>
+            <p class="meta"><i class="far fa-clock"></i>
+                2018-06-19
+                
+            </p>
+            <!-- Content -->
+            <p>大学上 UML 课程的时候总觉得设计模式遥不可及、无法理解，印象最深的是 UML 课程期末考试的最后一题是责任链模式相关的内容，我没有做出来。毕业后，也曾抱着《设计模式·可复用面向对象软件的基础》从头开始看，总感觉一头雾水，少点什么。</p>
 <p>如今看来，当时还是见得太少，经验不足。<br><a id="more"></a><br><img src="/images/design_pattern.jpg" alt=""></p>
 <p>书中关于的责任链模式的主要例子是多视窗对用户事件的处理，Android 系统中 View 树对触摸事件的分发处理流程也用到了责任链模式。</p>
 <p>该模式的核心想法是:</p>
@@ -102,93 +101,95 @@
 <p>值得一提的是 CacheInterceptor 类对 Http 协议的缓存设计做了完整的实现，很适合拿来学习Http协议的缓存处理，具体的细节便不在这里细说了。</p>
 <h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>OkHttp 源码读起来确实很优雅，很顺畅，但是如果是我们面对Http客户端的实现需求，是否能想到这么优雅的设计方案。和理解原理比起来，仅仅会使用库还远远不够；和设计实现比起来，仅仅理解原理也同样远远不够。</p>
 
-      
+            <br />
+            <p class="meta">
+                
+
+<a href="/tags/Android/"> <i class="fas fa-tags"></i>
+    Android </a>
+
+            </p>
+        </div>
+
+        <div class="col-sm-4">
+            
+
+<span><b>
+        TL;DR</b></span>
+<p>
+    Yet another hexo theme.
+</p>
+<hr />
+
+
+<span><b>
+        TL;DR 2</b></span>
+<p>
+    No, not another one :/
+</p>
+<hr />
+
+
+
+
+
+
+<span><a href="https://twitter.com/hexojs" target="_blank" rel="noopener"><b><i class="fab fa-twitter-square"></i>
+            <i class="fas fa-at"></i>
+            hexojs</b></a></span>
+<br />
+<a class="twitter-timeline" data-height="800" data-dnt="true" data-chrome="nofooter transparent noheader noborders "
+    href="https://twitter.com/hexojs?ref_src=twsrc%5Etfw"></a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        </div>
     </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Android/">Android</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-  
-	<section id="comment" class="comment">
-		<div id="disqus_thread"></div>
+</div>
+<!-- Menu fade on scroll -->
 <script>
-
-/**
-*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-/*
-var disqus_config = function () {
-this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
-(function() { // DON'T EDIT BELOW THIS LINE
-var d = document, s = d.createElement('script');
-s.src = 'https://jpdong-github-io.disqus.com/embed.js';
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
+    var isScrolling;
+    var prevScrollpos = window.pageYOffset;
+    window.addEventListener('scroll', function (event) {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(function () {
+            var currentScrollPos = window.pageYOffset;
+            if (prevScrollpos > currentScrollPos) {
+                $("#navbar").slideDown();
+            } else {
+                $("#navbar").slideUp();
+            }
+            prevScrollpos = currentScrollPos;
+        }, 66);
+    }, false);
 </script>
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-	  </div>
-	</section>
 
-	<script type="text/javascript">
-	var disqus_shortname = 'jpdong';
-	(function(){
-	  var dsq = document.createElement('script');
-	  dsq.type = 'text/javascript';
-	  dsq.async = true;
-	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	}());
-	(function(){
-	  var dsq = document.createElement('script');
-	  dsq.type = 'text/javascript';
-	  dsq.async = true;
-	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
-	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	}());
-	</script>
+<a class="float-left gradient btn paginationbtn" href="/2018/06/04/RxJava2线程切换原理/"><i class="fas fa-chevron-left"></i></a>
 
 
-
-
+<a class="float-right gradient btn paginationbtn" href="/2019/07/04/PetGroomingBrush/"><i class="fas fa-chevron-right"></i></a>
 
     </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
-    
-    &copy; 2018 董三毛
-    
-  </p>
-</footer>
-    
+    <!-- Footer -->
+    <footer class="page-footer">
+  <div class="container">
+    <div class="social-icons">
+      
+      <a href="https://hexo.io/" title="Hexo.io" target="_blank" rel="noopener" class="fas fa-home"></a>
+      
+      <a href="https://twitter.com/hexojs" title="@hexojs" target="_blank" rel="noopener" class="fab fa-twitter"></a>
+      
+      <a href="https://github.com/RandomAdversary/Gradient/issues" title="Report issue" target="_blank" rel="noopener" class="fas fa-bug"></a>
+      
+    </div>
   </div>
-</div>
-<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</footer>
+    <!-- After footer scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

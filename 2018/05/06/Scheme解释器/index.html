@@ -1,90 +1,88 @@
-<!DOCTYPE HTML>
 <html>
+<!-- Head tag -->
 <head>
-  <meta charset="utf-8">
-  
-  <title>Scheme 解释器 | 我几乎是对的</title>
+  <meta charset="UTF-8">
 
   
-  <meta name="author" content="董三毛">
+  <title>
+    Scheme 解释器 |
+    Goods Rank
+  </title>
   
 
-  
-  <meta name="description" content="最近重读王垠的博客，每天地铁上就刷个一两篇，然后再看《编译原理》就豁然开朗了。琢磨着Scheme语法简洁规范，前缀表达式是天然的树状语法，写个Scheme的解释器似乎没想象中那么难了，便动手用Java实现一个Scheme的编译器前端。
-推荐读一下王垠的文章 http://www.yinwang.org/blog-cn/2012/08/01/interpreter
-编译器前端工作一般包括两个大步骤：词法分析和语法分析，再就是解释执行或者生成中间代码，其中还有符号表（有的地方也称环境）贯穿这两个步骤，上述文章里的符号表是用单链表实现，简单易懂，方便教学，我们也可以试着用链式哈希表实现。源程序一般以字符串的形式输入，对输入字符逐个扫描分析，生成抽象语法树（abstract syntax tree），再根据每个树节点的符号、类型去进行语法分析，解释执行出最后结果。如果是用Scheme自举的话，词法分析几乎不需要做。">
-  
 
-  
-  <meta name="keywords" content="Android Java Swift">
-  
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta property="og:title" content="Scheme 解释器" />
+  <meta property="og:description" content="" />
+  <meta property='og:site_name' content='Goods Rank' />
+  <meta property="og:image" content="https://rank.design/img/default.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:description" content="" />
+  <meta name="twitter:title" content="Scheme 解释器" />
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="twitter:image" content="https://rank.design/img/default.jpg" />
 
-  <meta property="og:title" content="Scheme 解释器"/>
+  <script src="https://www.amcharts.com/lib/4/core.js"></script>
+  <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 
-  <meta property="og:site_name" content="我几乎是对的"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="/./css/style.css">
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
-
 <body>
-<div class="blog">
-  <div class="content">
-
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">我几乎是对的</a>
-    </h1>
-    <p class="site-description"></p>
+    <!-- Menu -->
+    <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark page-navbar gradient">
+  <div class="container">
+    <a class="navbar-brand logo" href="https://rank.design">
+      Goods Rank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item item">
+          
+        <li class="nav-item item">
+          <a class="nav-link" href="/">
+            Home</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="/archives">
+            🗂️Archives</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="https://hexo.io/">
+            Hexo</a>
+        </li>
+        
+        </li>
+      </ul>
+    </div>
   </div>
-  <nav class="site-navigation">
-    <ul>
-      
-        <li><a href="/">首页</a></li>
-      
-        <li><a href="/archives">归档</a></li>
-      
-    </ul>
-  </nav>
-</header>
+</nav>
 
-    <main class="site-main posts-loop">
-    <article>
-
-  
-    
-    <h3 class="article-title"><span>Scheme 解释器</span></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/05/06/Scheme解释器/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-05-06T07:48:58.000Z">
-          2018-05-06
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p>最近重读王垠的博客，每天地铁上就刷个一两篇，然后再看《编译原理》就豁然开朗了。琢磨着<code>Scheme</code>语法简洁规范，前缀表达式是天然的树状语法，写个<code>Scheme</code>的解释器似乎没想象中那么难了，便动手用<code>Java</code>实现一个<code>Scheme</code>的编译器前端。</p>
+    <main class="page main-page">
+        <div class="container blogPost">
+    <div class="row">
+        <div class="col-sm-8">
+            <h2 class="blog-post-title">
+                Scheme 解释器
+            </h2>
+            <p class="meta"><i class="far fa-clock"></i>
+                2018-05-06
+                
+            </p>
+            <!-- Content -->
+            <p>最近重读王垠的博客，每天地铁上就刷个一两篇，然后再看《编译原理》就豁然开朗了。琢磨着<code>Scheme</code>语法简洁规范，前缀表达式是天然的树状语法，写个<code>Scheme</code>的解释器似乎没想象中那么难了，便动手用<code>Java</code>实现一个<code>Scheme</code>的编译器前端。</p>
 <p>推荐读一下王垠的文章 <a href="http://www.yinwang.org/blog-cn/2012/08/01/interpreter" target="_blank" rel="noopener">http://www.yinwang.org/blog-cn/2012/08/01/interpreter</a></p>
 <p>编译器前端工作一般包括两个大步骤：词法分析和语法分析，再就是解释执行或者生成中间代码，其中还有符号表（有的地方也称环境）贯穿这两个步骤，上述文章里的符号表是用单链表实现，简单易懂，方便教学，我们也可以试着用链式哈希表实现。源程序一般以字符串的形式输入，对输入字符逐个扫描分析，生成抽象语法树（<code>abstract syntax tree</code>），再根据每个树节点的符号、类型去进行语法分析，解释执行出最后结果。如果是用Scheme自举的话，词法分析几乎不需要做。</p>
 <a id="more"></a>
@@ -126,93 +124,95 @@
 <p>完整代码见项目 <a href="https://github.com/jpdong/SchemeInterpreter" target="_blank" rel="noopener">https://github.com/jpdong/SchemeInterpreter</a></p>
 <h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>大学的时候对编译原理这门课是望而生畏，当时也没有接触到<code>Scheme</code>这么简洁的语言，学完了对编译器也没有概念。现在回看，有了些不同语言的积累，开始渐渐地能理解那些概念了，边实现边理解，就能豁然开朗了。虽然这只是实现了一个简单语言的编译器前端，真正的精华还在后面后端的实现与优化，但这是从零到一的过程，后面还需要一步一个脚印，学习那些本质的东西。</p>
 
-      
+            <br />
+            <p class="meta">
+                
+
+<a href="/tags/Java/"> <i class="fas fa-tags"></i>
+    Java </a>
+
+            </p>
+        </div>
+
+        <div class="col-sm-4">
+            
+
+<span><b>
+        TL;DR</b></span>
+<p>
+    Yet another hexo theme.
+</p>
+<hr />
+
+
+<span><b>
+        TL;DR 2</b></span>
+<p>
+    No, not another one :/
+</p>
+<hr />
+
+
+
+
+
+
+<span><a href="https://twitter.com/hexojs" target="_blank" rel="noopener"><b><i class="fab fa-twitter-square"></i>
+            <i class="fas fa-at"></i>
+            hexojs</b></a></span>
+<br />
+<a class="twitter-timeline" data-height="800" data-dnt="true" data-chrome="nofooter transparent noheader noborders "
+    href="https://twitter.com/hexojs?ref_src=twsrc%5Etfw"></a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+        </div>
     </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Java/">Java</a>
-    </span>
-    
-
-    </div>
-
-    
-  </div>
-</article>
-
-  
-	<section id="comment" class="comment">
-		<div id="disqus_thread"></div>
+</div>
+<!-- Menu fade on scroll -->
 <script>
-
-/**
-*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-/*
-var disqus_config = function () {
-this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
-(function() { // DON'T EDIT BELOW THIS LINE
-var d = document, s = d.createElement('script');
-s.src = 'https://jpdong-github-io.disqus.com/embed.js';
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
+    var isScrolling;
+    var prevScrollpos = window.pageYOffset;
+    window.addEventListener('scroll', function (event) {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(function () {
+            var currentScrollPos = window.pageYOffset;
+            if (prevScrollpos > currentScrollPos) {
+                $("#navbar").slideDown();
+            } else {
+                $("#navbar").slideUp();
+            }
+            prevScrollpos = currentScrollPos;
+        }, 66);
+    }, false);
 </script>
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-	  </div>
-	</section>
 
-	<script type="text/javascript">
-	var disqus_shortname = 'jpdong';
-	(function(){
-	  var dsq = document.createElement('script');
-	  dsq.type = 'text/javascript';
-	  dsq.async = true;
-	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	}());
-	(function(){
-	  var dsq = document.createElement('script');
-	  dsq.type = 'text/javascript';
-	  dsq.async = true;
-	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
-	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	}());
-	</script>
+<a class="float-left gradient btn paginationbtn" href="/2018/04/26/尾递归的骗局/"><i class="fas fa-chevron-left"></i></a>
 
 
-
-
+<a class="float-right gradient btn paginationbtn" href="/2018/05/16/逆转USB网络共享/"><i class="fas fa-chevron-right"></i></a>
 
     </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
-    
-    &copy; 2018 董三毛
-    
-  </p>
-</footer>
-    
+    <!-- Footer -->
+    <footer class="page-footer">
+  <div class="container">
+    <div class="social-icons">
+      
+      <a href="https://hexo.io/" title="Hexo.io" target="_blank" rel="noopener" class="fas fa-home"></a>
+      
+      <a href="https://twitter.com/hexojs" title="@hexojs" target="_blank" rel="noopener" class="fab fa-twitter"></a>
+      
+      <a href="https://github.com/RandomAdversary/Gradient/issues" title="Report issue" target="_blank" rel="noopener" class="fas fa-bug"></a>
+      
+    </div>
   </div>
-</div>
-<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</footer>
+    <!-- After footer scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

@@ -1,637 +1,312 @@
-<!DOCTYPE HTML>
 <html>
+<!-- Head tag -->
 <head>
-  <meta charset="utf-8">
-  
-  <title>我几乎是对的</title>
+  <meta charset="UTF-8">
 
   
-  <meta name="author" content="董三毛">
+  <title>
+    Goods Rank -
+    
+  </title>
   
 
-  
 
-  
-  <meta name="keywords" content="Android Java Swift">
-  
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta property="og:title" content="Goods Rank" />
+  <meta property="og:description" content="" />
+  <meta property='og:site_name' content='Goods Rank' />
+  <meta property="og:image" content="https://rank.design/img/default.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:description" content="" />
+  <meta name="twitter:title" content="Goods Rank" />
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="twitter:image" content="https://rank.design/img/default.jpg" />
 
-  
+  <script src="https://www.amcharts.com/lib/4/core.js"></script>
+  <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 
-  <meta property="og:site_name" content="我几乎是对的"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="/./css/style.css">
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
-
 <body>
-<div class="blog">
-  <div class="content">
-
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">我几乎是对的</a>
-    </h1>
-    <p class="site-description"></p>
+    <!-- Menu -->
+    <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark page-navbar gradient">
+  <div class="container">
+    <a class="navbar-brand logo" href="https://rank.design">
+      Goods Rank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item item">
+          
+        <li class="nav-item item">
+          <a class="nav-link" href="/">
+            Home</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="/archives">
+            🗂️Archives</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="https://hexo.io/">
+            Hexo</a>
+        </li>
+        
+        </li>
+      </ul>
+    </div>
   </div>
-  <nav class="site-navigation">
-    <ul>
-      
-        <li><a href="/">首页</a></li>
-      
-        <li><a href="/archives">归档</a></li>
-      
-    </ul>
-  </nav>
-</header>
+</nav>
 
-    <main class="site-main posts-loop">
+    <main class="page main-page">
+        <div class="band">
     
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/06/19/OkHttp-与责任链模式/"><span>OkHttp 与责任链模式</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/06/19/OkHttp-与责任链模式/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-06-19T13:56:54.000Z">
-          2018-06-19
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-1">
+  <a href="/2019/07/04/PetGroomingBrush/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        The Best Pet Grooming Brush
+      </h1>
       
+      <span>
+        2019-07-04</span>
+    </article>
+  </a>
+</div>
+    
+    
+
+<div class="item-2">
+  <a href="/2018/06/19/OkHttp-与责任链模式/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        OkHttp 与责任链模式
+      </h1>
+      
+      <p>
         <p>大学上 UML 课程的时候总觉得设计模式遥不可及、无法理解，印象最深的是 UML 课程期末考试的最后一题是责任链模式相关的内容，我没有做出来。毕业后，也曾抱着《设计模式·可复用面向对象软件的基础》从头开始看，总感觉一头雾水，少点什么。</p>
 <p>如今看来，当时还是见得太少，经验不足。<br>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Android/">Android</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/06/19/OkHttp-与责任链模式/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
+        2018-06-19</span>
+    </article>
+  </a>
+</div>
     
-  </div>
-</article>
-
-
-
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/06/04/RxJava2线程切换原理/"><span>RxJava2 线程切换原理</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/06/04/RxJava2线程切换原理/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-06-04T12:44:51.000Z">
-          2018-06-04
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-3">
+  <a href="/2018/06/04/RxJava2线程切换原理/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        RxJava2 线程切换原理
+      </h1>
       
+      <p>
         <p>在移动端编程的时候基本上都会需要频繁地切换线程，因为复杂的耗时任务需要放到后台线程里去运行，<code>UI</code>绘制工作又只能在主线程里执行。<code>Android</code> 里一般用<code>Handler</code>实现，<code>iOS</code> 里通过系统提供的任务队列实现，但两者均不够优雅，无可避免地需要将代码包裹起来，<code>Android</code> 里需要用<code>Runnable</code>传递，<code>iOS</code>里则是闭包。如果遇到多次切换线程的情况，代码的缩进层级就会变深，可读性变差。</p>
 <p>还好，<code>ReactiveX</code> 库优雅地解决了这个问题，而且还是跨平台的，<code>RxJava</code> 和 <code>RxSwift</code> 让移动端的线程切换工作变得优雅起来。</p>
 <p>这篇文章主要试图说清楚<code>RxJava2</code>线程切换的实现过程。</p>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Java/">Java</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/06/04/RxJava2线程切换原理/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
+        2018-06-04</span>
+    </article>
+  </a>
+</div>
     
-  </div>
-</article>
-
-
-
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/05/16/逆转USB网络共享/"><span>逆转 Android USB 网络共享</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/05/16/逆转USB网络共享/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-05-16T13:48:12.000Z">
-          2018-05-16
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-4">
+  <a href="/2018/05/16/逆转USB网络共享/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        逆转 Android USB 网络共享
+      </h1>
       
+      <p>
         <p>可能是贫穷限制了我的想象力，我一直以为<code>Android</code>手机设置里的<code>USB</code>网络共享是用<code>PC</code>的网络供给手机上网，一直没用过。直到有一次工作中某个通过<code>4G</code>上网的设备没有流量之后，我便想要要用这个功能用电脑“救济”一下这个设备，用了之后我就傻了，这是用来把<code>Android</code>设备的流量供给电脑用，不能使用电脑的网络。在贫穷的我看来这个功能简直鸡肋。</p>
 <p>后来发现开启USB网络共享之后，会在<code>Windows</code>里增加一个网络适配器，网络经验丰富的前辈告诉我说可以试一下用<code>NAT</code>转发。当时我脑中一片空白，虽然大学里也学过计算机网络，但从来没有实战过，而且<code>NAT</code>是个啥，书上有么。</p>
 <p>于是为了实现这个黑科技，我几乎又研究了一遍计算机网络，了解了<code>NAT</code>，<code>iptables</code>，<code>linux</code>系统的防火墙设计。收获颇多，就有了这篇文字。<br>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Android/">Android</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/05/16/逆转USB网络共享/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
+        2018-05-16</span>
+    </article>
+  </a>
+</div>
     
-  </div>
-</article>
-
-
-
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/05/06/Scheme解释器/"><span>Scheme 解释器</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/05/06/Scheme解释器/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-05-06T07:48:58.000Z">
-          2018-05-06
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-5">
+  <a href="/2018/05/06/Scheme解释器/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        Scheme 解释器
+      </h1>
       
+      <p>
         <p>最近重读王垠的博客，每天地铁上就刷个一两篇，然后再看《编译原理》就豁然开朗了。琢磨着<code>Scheme</code>语法简洁规范，前缀表达式是天然的树状语法，写个<code>Scheme</code>的解释器似乎没想象中那么难了，便动手用<code>Java</code>实现一个<code>Scheme</code>的编译器前端。</p>
 <p>推荐读一下王垠的文章 <a href="http://www.yinwang.org/blog-cn/2012/08/01/interpreter" target="_blank" rel="noopener">http://www.yinwang.org/blog-cn/2012/08/01/interpreter</a></p>
 <p>编译器前端工作一般包括两个大步骤：词法分析和语法分析，再就是解释执行或者生成中间代码，其中还有符号表（有的地方也称环境）贯穿这两个步骤，上述文章里的符号表是用单链表实现，简单易懂，方便教学，我们也可以试着用链式哈希表实现。源程序一般以字符串的形式输入，对输入字符逐个扫描分析，生成抽象语法树（<code>abstract syntax tree</code>），再根据每个树节点的符号、类型去进行语法分析，解释执行出最后结果。如果是用Scheme自举的话，词法分析几乎不需要做。</p>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Java/">Java</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/05/06/Scheme解释器/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
+        2018-05-06</span>
+    </article>
+  </a>
+</div>
     
-  </div>
-</article>
-
-
-
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/04/26/尾递归的骗局/"><span>尾递归的局限</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/04/26/尾递归的骗局/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-04-26T14:03:37.000Z">
-          2018-04-26
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-6">
+  <a href="/2018/04/26/尾递归的骗局/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        尾递归的局限
+      </h1>
       
+      <p>
         <p>之前看书的时候，有看到尾递归方面的理论知识，比较有名的是作为对递归计算阶乘的优化，理论上无懈可击，是那么完美，但现实很骨感。事实是，大部分语言和编译器都不支持尾递归优化。</p>
 <p>对于尾递归（或者说尾调用），维基百科的解释如下：</p>
 <blockquote>
 <p>在计算机学里，尾调用是指一个函数里的最后一个动作是返回一个函数的调用结果的情形，即最后一步新调用的返回值直接被当前函数的返回结果。此时，该尾部调用位置被称为尾位置。尾调用中有一种重要而特殊的情形叫做尾递归。经过适当处理，尾递归形式的函数的运行效率可以被极大地优化。尾调用原则上都可以通过简化函数调用栈的结构而获得性能优化（称为“尾调用消除”），但是优化尾调用是否方便可行取决于运行环境对此类优化的支持程度如何。</p>
 </blockquote>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/算法/">算法</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/04/26/尾递归的骗局/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
+        2018-04-26</span>
+    </article>
+  </a>
+</div>
     
-  </div>
-</article>
-
-
-
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/04/12/数据结构平衡二叉树-AVLTree-中的旋转/"><span>数据结构平衡二叉树中的旋转</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/04/12/数据结构平衡二叉树-AVLTree-中的旋转/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-04-12T14:22:28.000Z">
-          2018-04-12
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-7">
+  <a href="/2018/04/12/数据结构平衡二叉树-AVLTree-中的旋转/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        数据结构平衡二叉树中的旋转
+      </h1>
       
+      <p>
         <p>网上关于平衡二叉树的文章大多是摆几张图，然后就开始贴代码，很多具体的细节都没有说清楚，需要读者去试错。本篇文章试图说明这些细节，希望读者看了这篇文章之后，就能立马实现出来。</p>
 <p><img src="/images/avl-tree.png" alt=""></p>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/数据结构/">数据结构</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/04/12/数据结构平衡二叉树-AVLTree-中的旋转/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
+        2018-04-12</span>
+    </article>
+  </a>
+</div>
     
-  </div>
-</article>
-
-
-
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/04/12/Java定时线程池ScheduledThreadPoolExecutor的正确使用/"><span>Java 定时线程池的正确使用</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/04/12/Java定时线程池ScheduledThreadPoolExecutor的正确使用/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-04-12T14:20:00.000Z">
-          2018-04-12
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-8">
+  <a href="/2018/04/12/Java定时线程池ScheduledThreadPoolExecutor的正确使用/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        Java 定时线程池的正确使用
+      </h1>
       
+      <p>
         <p><code>ScheduledThreadPoolExecutor</code>与<code>ThreadPoolExecutor</code>的使用还是有一些区别的。比如异常捕获和删除任务操作这两点上就有很大不同。这篇文章试图要说清楚的就是这两点。</p>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Java/">Java</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/04/12/Java定时线程池ScheduledThreadPoolExecutor的正确使用/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
+        2018-04-12</span>
+    </article>
+  </a>
+</div>
     
-  </div>
-</article>
-
-
-
-  <article>
-
-  
     
-    <h3 class="article-title"><a href="/2018/04/12/多字节传输中的大小端问题/"><span>多字节传输中的大小端问题</span></a></h3>
-    
-  
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/04/12/多字节传输中的大小端问题/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-04-12T14:18:30.000Z">
-          2018-04-12
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
+<div class="item-9">
+  <a href="/2018/04/12/多字节传输中的大小端问题/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        多字节传输中的大小端问题
+      </h1>
       
+      <p>
         <p>在几乎所有的机器上，多字节对象都被存储为连续的字节序列。例如在C语言中，一个类型为int的变量x地址为0x100，那么其对应地址表达式&amp;x的值为0x100。且x的四个字节将被存储在存储器的0x100, 0x101, 0x102, 0x103位置。  </p>
 <p>而存储地址内的排列则有两个通用规则。一个多位的整数将按照其存储地址的最低或最高字节排列。如果最低有效位在最高有效位的前面，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。  </p>
+      </p>
       
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
       <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/04/12/多字节传输中的大小端问题/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-
-  <article>
-
-  
-    
-    <h3 class="article-title"><a href="/2018/04/12/Activity知识结构/"><span>Activity知识结构</span></a></h3>
-    
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/04/12/Activity知识结构/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-04-12T13:44:52.000Z">
-          2018-04-12
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p>对Android四大组件之一的Activity知识进行的整理。由官方文档翻译整理总结而来。Activity无疑是Android中最重要的部分，类似于iOS中的UIViewController。</p>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-    
-
-    
-    
-
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/Android/">Android</a>
-    </span>
-    
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/04/12/Activity知识结构/#comment">Comments</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-
-
-<nav class="pagination">
-  
-  
-</nav>
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
-    
-    &copy; 2018 董三毛
-    
-  </p>
-</footer>
-    
-  </div>
+        2018-04-12</span>
+    </article>
+  </a>
 </div>
-<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+    
+    
+
+<div class="item-10">
+  <a href="/2018/04/12/Activity知识结构/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        Activity知识结构
+      </h1>
+      
+      <p>
+        <p>对Android四大组件之一的Activity知识进行的整理。由官方文档翻译整理总结而来。Activity无疑是Android中最重要的部分，类似于iOS中的UIViewController。</p>
+      </p>
+      
+      <span>
+        2018-04-12</span>
+    </article>
+  </a>
+</div>
+    
+</div>
+
+
+    </main>
+    <!-- Footer -->
+    <footer class="page-footer">
+  <div class="container">
+    <div class="social-icons">
+      
+      <a href="https://hexo.io/" title="Hexo.io" target="_blank" rel="noopener" class="fas fa-home"></a>
+      
+      <a href="https://twitter.com/hexojs" title="@hexojs" target="_blank" rel="noopener" class="fab fa-twitter"></a>
+      
+      <a href="https://github.com/RandomAdversary/Gradient/issues" title="Report issue" target="_blank" rel="noopener" class="fas fa-bug"></a>
+      
+    </div>
+  </div>
+</footer>
+    <!-- After footer scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

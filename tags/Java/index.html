@@ -1,303 +1,164 @@
-<!DOCTYPE HTML>
 <html>
+<!-- Head tag -->
 <head>
-  <meta charset="utf-8">
-  
-  <title>Java | 我几乎是对的</title>
+  <meta charset="UTF-8">
 
   
-  <meta name="author" content="董三毛">
+  <title>
+    Goods Rank -
+    
+  </title>
   
 
-  
 
-  
-  <meta name="keywords" content="Android Java Swift">
-  
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta property="og:title" content="Goods Rank" />
+  <meta property="og:description" content="" />
+  <meta property='og:site_name' content='Goods Rank' />
+  <meta property="og:image" content="https://rank.design/img/default.jpg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:description" content="" />
+  <meta name="twitter:title" content="Goods Rank" />
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="twitter:image" content="https://rank.design/img/default.jpg" />
 
-  
+  <script src="https://www.amcharts.com/lib/4/core.js"></script>
+  <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+  <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 
-  <meta property="og:site_name" content="我几乎是对的"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="/./css/style.css">
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
-
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="我几乎是对的" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 </head>
 
-
 <body>
-<div class="blog">
-  <div class="content">
-
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">我几乎是对的</a>
-    </h1>
-    <p class="site-description"></p>
-  </div>
-  <nav class="site-navigation">
-    <ul>
-      
-        <li><a href="/">首页</a></li>
-      
-        <li><a href="/archives">归档</a></li>
-      
-    </ul>
-  </nav>
-</header>
-
-    <main class="site-main posts-loop">
-    <style>
-.archive {
-  font-family: "Open Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Jhenghei", sans-serif;
-}
-
-.archive-year {
-    margin: 20px 10px;
-    font-size: 24px;
-}
-.archive-month {
-  margin-left: 80px;
-  font-size: 20px;
-  color: #aaa;
-}
-.archive-post-time {
-    margin-left: 120px;
-    color: #aaa;
-    font-size: 14px;
-    line-height: 25px;
-    float: left;
-    display: block;
-}
-.archive-post-title {
-    font-size: 16px;
-    margin-left: 60px;
-    line-height: 1.6;
-    font-weight: normal;
-    color: grey;
-}
-.achive-post-subtitle {
-  display: block;
-  font-size: 14px;
-  margin-left: 223px;
-  color: grey;
-}
-.row {
-  margin-top: 40px;
-  margin-bottom: 30px;
-}
-.title-row {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-@media only screen and (max-device-width: 900px) {
-	.archive-month {
-		margin-left: 42px;
-	}
-  .archive-post-time {
-      margin-left: 48px;
-  }
-  .archive-post-title {
-      margin-left: 10px;
-  }
-  .title-row {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-}
-</style>
-
-
-<article class="container archive">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Menu -->
+    <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark page-navbar gradient">
+  <div class="container">
+    <a class="navbar-brand logo" href="https://rank.design">
+      Goods Rank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item item">
           
-                
-                
-                
-                    
-                    
-                    <div data-date="2018">
-                      <span class="fa fa-heart"></span>
-                      <a href="/archives/2018" class="archive-year">2018</a>
-                    </div>
-                
-
-                
-                    
-                    <div class="archive-month" data-date="201806">
-                         06
-                    </div>
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">06-19</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/06/19/OkHttp-与责任链模式/#disqus_thread" class="archive-post-item">OkHttp 与责任链模式</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">06-04</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/06/04/RxJava2线程切换原理/#disqus_thread" class="archive-post-item">RxJava2 线程切换原理</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                    
-                    <div class="archive-month" data-date="201805">
-                         05
-                    </div>
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">05-16</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/05/16/逆转USB网络共享/#disqus_thread" class="archive-post-item">逆转 Android USB 网络共享</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">05-06</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/05/06/Scheme解释器/#disqus_thread" class="archive-post-item">Scheme 解释器</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                    
-                    <div class="archive-month" data-date="201804">
-                         04
-                    </div>
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">04-26</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/04/26/尾递归的骗局/#disqus_thread" class="archive-post-item">尾递归的局限</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">04-12</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/04/12/数据结构平衡二叉树-AVLTree-中的旋转/#disqus_thread" class="archive-post-item">数据结构平衡二叉树中的旋转</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">04-12</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/04/12/Java定时线程池ScheduledThreadPoolExecutor的正确使用/#disqus_thread" class="archive-post-item">Java 定时线程池的正确使用</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">04-12</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/04/12/多字节传输中的大小端问题/#disqus_thread" class="archive-post-item">多字节传输中的大小端问题</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-                
-                
-                
-
-                
-                <div class="title-row">
-                          <h3>
-                              <span class="archive-post-time">04-12</span>
-                              <span class="archive-post-title">
-                                <a href="/2018/04/12/Activity知识结构/#disqus_thread" class="archive-post-item">Activity知识结构</a>
-                              </span>
-                          </h3>
-                          
-                </div>
-          
-        </div>
+        <li class="nav-item item">
+          <a class="nav-link" href="/">
+            Home</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="/archives">
+            🗂️Archives</a>
+        </li>
+        
+        <li class="nav-item item">
+          <a class="nav-link" href="https://hexo.io/">
+            Hexo</a>
+        </li>
+        
+        </li>
+      </ul>
     </div>
-</article>
+  </div>
+</nav>
+
+    <main class="page main-page">
+        
+
+<div class="title">
+    <h2>
+        Java
+    </h2>
+</div>
+
+
+<div class="band">
+    
+    <div class="item-01">
+  <a href="/2018/06/04/RxJava2线程切换原理/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        RxJava2 线程切换原理
+      </h1>
+      <p>
+        <p>在移动端编程的时候基本上都会需要频繁地切换线程，因为复杂的耗时任务需要放到后台线程里去运行，<code>UI</code>绘制工作又只能在主线程里执行。<code>Android</code> 里一般用<code>Handler</code>实现，<code>iOS</code> 里通过系统提供的任务队列实现，但两者均不够优雅，无可避免地需要将代码包裹起来，<code>Android</code> 里需要用<code>Runnable</code>传递，<code>iOS</code>里则是闭包。如果遇到多次切换线程的情况，代码的缩进层级就会变深，可读性变差。</p>
+<p>还好，<code>ReactiveX</code> 库优雅地解决了这个问题，而且还是跨平台的，<code>RxJava</code> 和 <code>RxSwift</code> 让移动端的线程切换工作变得优雅起来。</p>
+<p>这篇文章主要试图说清楚<code>RxJava2</code>线程切换的实现过程。</p>
+      </p>
+      <span>
+        2018-06-04</span>
+    </article>
+  </a>
+</div>
+    
+    <div class="item-02">
+  <a href="/2018/05/06/Scheme解释器/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        Scheme 解释器
+      </h1>
+      <p>
+        <p>最近重读王垠的博客，每天地铁上就刷个一两篇，然后再看《编译原理》就豁然开朗了。琢磨着<code>Scheme</code>语法简洁规范，前缀表达式是天然的树状语法，写个<code>Scheme</code>的解释器似乎没想象中那么难了，便动手用<code>Java</code>实现一个<code>Scheme</code>的编译器前端。</p>
+<p>推荐读一下王垠的文章 <a href="http://www.yinwang.org/blog-cn/2012/08/01/interpreter" target="_blank" rel="noopener">http://www.yinwang.org/blog-cn/2012/08/01/interpreter</a></p>
+<p>编译器前端工作一般包括两个大步骤：词法分析和语法分析，再就是解释执行或者生成中间代码，其中还有符号表（有的地方也称环境）贯穿这两个步骤，上述文章里的符号表是用单链表实现，简单易懂，方便教学，我们也可以试着用链式哈希表实现。源程序一般以字符串的形式输入，对输入字符逐个扫描分析，生成抽象语法树（<code>abstract syntax tree</code>），再根据每个树节点的符号、类型去进行语法分析，解释执行出最后结果。如果是用Scheme自举的话，词法分析几乎不需要做。</p>
+      </p>
+      <span>
+        2018-05-06</span>
+    </article>
+  </a>
+</div>
+    
+    <div class="item-03">
+  <a href="/2018/04/12/Java定时线程池ScheduledThreadPoolExecutor的正确使用/" class="post">
+    <div class="thumb" style="background-image: url(/./img/default.jpg);"></div>
+    <article>
+      <h1>
+        Java 定时线程池的正确使用
+      </h1>
+      <p>
+        <p><code>ScheduledThreadPoolExecutor</code>与<code>ThreadPoolExecutor</code>的使用还是有一些区别的。比如异常捕获和删除任务操作这两点上就有很大不同。这篇文章试图要说清楚的就是这两点。</p>
+      </p>
+      <span>
+        2018-04-12</span>
+    </article>
+  </a>
+</div>
+    
+</div>
+
 
     </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
-    
-    &copy; 2018 董三毛
-    
-  </p>
-</footer>
-    
+    <!-- Footer -->
+    <footer class="page-footer">
+  <div class="container">
+    <div class="social-icons">
+      
+      <a href="https://hexo.io/" title="Hexo.io" target="_blank" rel="noopener" class="fas fa-home"></a>
+      
+      <a href="https://twitter.com/hexojs" title="@hexojs" target="_blank" rel="noopener" class="fab fa-twitter"></a>
+      
+      <a href="https://github.com/RandomAdversary/Gradient/issues" title="Report issue" target="_blank" rel="noopener" class="fas fa-bug"></a>
+      
+    </div>
   </div>
-</div>
-<script id="dsq-count-scr" src="//jpdong-github-io.disqus.com/count.js" async></script>
+</footer>
+    <!-- After footer scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>
